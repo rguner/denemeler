@@ -1,0 +1,74 @@
+#
+# Project specific excludes
+#
+
+tomcat
+
+#
+# Default excludes
+#
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+
+# Maven 
+target/
+
+# IntelliJ project files 
+*.iml
+*.iws
+*.ipr
+
+# eclipse project file
+.settings/
+.metadata/
+.classpath
+.project
+classes/
+
+# NetBeans specific
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+
+# OS
+.DS_Store
+
+# Misc
+*.swp
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag
+
+
+
+# General
+bin/
+coverage-report/
+testLogs/
+rebel.xml
+rebel-remote.xml
+
+#vs
+.factorypath
+
+.idea/
+
+.run/
+
+.surefire*
