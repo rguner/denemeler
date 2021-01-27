@@ -8,7 +8,8 @@ public class RedishashApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RedishashApplication.class, args);
-		
+
+
 	}
 
 }
