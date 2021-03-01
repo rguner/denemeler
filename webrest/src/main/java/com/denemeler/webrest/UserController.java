@@ -80,7 +80,7 @@ public class UserController {
     Callable<String> task = () -> {
         try {
             System.out.println("İŞLEM - Thread Name : " + Thread.currentThread().getName());
-            TimeUnit.SECONDS.sleep(10000);
+            TimeUnit.MILLISECONDS.sleep(10000);
             System.out.println("İŞLEM sleep sonrası - Thread Name : " + Thread.currentThread().getName());
             return "RAMAZAN Future";
         }
