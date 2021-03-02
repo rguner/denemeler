@@ -27,10 +27,9 @@ public class UserController {
     }
 
     /**
-     *
      * If you read the Javadocs for @RequestMapping you will find that a method can return a CompletableFuture "which the application uses to produce a return value in a separate thread of its own choosing
      * https://spring.io/blog/2016/07/20/notes-on-reactive-programming-part-iii-a-simple-http-server-application
-     *
+     * <p>
      * Sonuç:
      * ForkJoinPool.commonPool-worker-3 Hello ForkJoinPool.commonPool-worker-3 World
      * yani paralel işlemin sonucu gider response olarak
@@ -47,7 +46,7 @@ public class UserController {
         });
 
         CompletableFuture<String> future = completableFuture
-                .thenApply(s -> s + Thread.currentThread().getName()  + " World");
+                .thenApply(s -> s + Thread.currentThread().getName() + " World");
 
         System.out.println("ÇIKIŞ - Thread Name : " + Thread.currentThread().getName());
         return future;
@@ -56,15 +55,13 @@ public class UserController {
 
 
     /**
-     *
      * http://localhost:8080/parallel2
-     *
+     * <p>
      * future objesi döner sonuç dönmez
      * {
      * "cancelled": false,
      * "done": false
      * }
-     *
      */
     @RequestMapping("/parallel2")
     public Future<String> parallel2() {
@@ -83,8 +80,7 @@ public class UserController {
             TimeUnit.MILLISECONDS.sleep(10000);
             System.out.println("İŞLEM sleep sonrası - Thread Name : " + Thread.currentThread().getName());
             return "RAMAZAN Future";
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             throw new IllegalStateException("task interrupted", e);
         }
     };

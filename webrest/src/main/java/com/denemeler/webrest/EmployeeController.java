@@ -31,7 +31,7 @@ public class EmployeeController {
         System.out.println("-----------------------------------------------------------------------------------------------------------");
         sleep();
         System.out.println("EmployeeController.getAllEmployees :" + Thread.currentThread().getName());
-        List<Employee> list= new ArrayList<>();
+        List<Employee> list = new ArrayList<>();
         Employee employee = new Employee();
         employee.setId("Id1");
         employee.setName("Ramazan Güner");

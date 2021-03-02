@@ -12,18 +12,18 @@ public class RequestResponseLoggingFilter implements Filter {
 
     @Override
     public void doFilter(
-      ServletRequest request,
-      ServletResponse response,
-      FilterChain chain) throws IOException, ServletException {
- 
+            ServletRequest request,
+            ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         System.out.printf("Filter Logging Request %s : %s %s\n", req.getMethod(),
-          req.getRequestURI(), Thread.currentThread().getName());
+                req.getRequestURI(), Thread.currentThread().getName());
         chain.doFilter(request, response);
         System.out.printf(
-          "Filter Logging Response : %s %s\n",
-          res.getContentType(), Thread.currentThread().getName());
+                "Filter Logging Response : %s %s\n",
+                res.getContentType(), Thread.currentThread().getName());
     }
 
     // other methods
