@@ -42,8 +42,8 @@ public class EmployeeController {
                 .uri("/employees")
                 .retrieve()
                 .bodyToFlux(Employee.class)
-                .log();
-
+                //.log()
+                ;
         //employeeFlux.subscribe(System.out::println);
         System.out.println("EmployeeController.getAllEmployees bitti        :" + Thread.currentThread().getName());
         return employeeFlux;
