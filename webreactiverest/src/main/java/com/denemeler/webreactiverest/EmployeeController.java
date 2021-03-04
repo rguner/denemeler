@@ -1,6 +1,9 @@
 package com.denemeler.webreactiverest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +25,10 @@ import java.util.List;
 public class EmployeeController {
 
     WebClient webClient = WebClient.create("http://localhost:8080");
+
+    @Autowired
+    @Qualifier("subscriberTaskExecutor")
+    ThreadPoolTaskExecutor subscriberTaskExecutor;
 
     @GetMapping("/{id}")
     private Mono<Employee> getEmployeeById(@PathVariable String id) {
@@ -42,9 +50,10 @@ public class EmployeeController {
                 .uri("/employees")
                 .retrieve()
                 .bodyToFlux(Employee.class)
+                .subscribeOn(Schedulers.fromExecutor(subscriberTaskExecutor))
                 //.log()
                 ;
-        //employeeFlux.subscribe(System.out::println);
+        //employeeFlux.subscribe(e-> {System.out.println(e.getName() + " " + Thread.currentThread().getName());});
         System.out.println("EmployeeController.getAllEmployees bitti        :" + Thread.currentThread().getName());
         return employeeFlux;
     }
