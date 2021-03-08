@@ -26,9 +26,15 @@ public class EmployeeController {
 
     WebClient webClient = WebClient.create("http://localhost:8080");
 
+    /*
     @Autowired
     @Qualifier("subscriberTaskExecutor")
     ThreadPoolTaskExecutor subscriberTaskExecutor;
+     */
+
+    @Autowired
+    @Qualifier("publisherTaskExecutor")
+    ThreadPoolTaskExecutor publisherTaskExecutor;
 
     @GetMapping("/{id}")
     private Mono<Employee> getEmployeeById(@PathVariable String id) {
@@ -50,7 +56,7 @@ public class EmployeeController {
                 .uri("/employees")
                 .retrieve()
                 .bodyToFlux(Employee.class)
-                .subscribeOn(Schedulers.fromExecutor(subscriberTaskExecutor))
+                .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
                 //.log()
                 ;
         //employeeFlux.subscribe(e-> {System.out.println(e.getName() + " " + Thread.currentThread().getName());});

@@ -13,13 +13,26 @@ public class WebreactiverestApplication {
     }
 
 
+    /*
     @Bean(name = "subscriberTaskExecutor")
-    public ThreadPoolTaskExecutor taskExecutor1() {
+    public ThreadPoolTaskExecutor taskExecutorSubscriber() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(10);
         executor.setQueueCapacity(100);
         executor.setThreadNamePrefix("subscriber-");
+        executor.initialize();
+        return executor;
+    }
+     */
+
+    @Bean(name = "publisherTaskExecutor")
+    public ThreadPoolTaskExecutor taskExecutorPublisher() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("publisher-");
         executor.initialize();
         return executor;
     }
