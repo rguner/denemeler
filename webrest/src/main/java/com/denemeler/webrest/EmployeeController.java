@@ -31,7 +31,11 @@ public class EmployeeController {
     private List<Employee> getAllEmployees() {
         System.out.println("-----------------------------------------------------------------------------------------------------------");
         sleep();
-        System.out.println("EmployeeController.getAllEmployees :" + Thread.currentThread().getName());
+        //System.out.println("EmployeeController.getAllEmployees :" + Thread.currentThread().getName() + " ThreadId: " + Thread.currentThread().getId());
+        System.out.println("EmployeeController.getAllEmployees :" +
+                Thread.currentThread().getName()
+                + " ThreadId: " + Thread.currentThread().getId());
+
         List<Employee> list = new ArrayList<>();
         IntStream.range(1,100).forEach( i -> {
                     Employee employee = new Employee();
@@ -51,7 +55,7 @@ public class EmployeeController {
                     employee4.setName("Ömer Mete Güner");
                     list.add(employee4);
                 });
-        System.out.println("EmployeeController.getAllEmployees bitti:" + Thread.currentThread().getName());
+        // System.out.println("EmployeeController.getAllEmployees bitti:" + Thread.currentThread().getName());
         return list;
     }
 
