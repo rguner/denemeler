@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -114,15 +115,49 @@ public class EmployeeController {
         System.out.println("EmployeeController.getAllEmployeesStream2 :" + Thread.currentThread().getName());
         Flux<Employee> employeeFlux =
                 Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                        .delayElements(Duration.ofMillis(2000))
+                        .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
+                //.log()
+                ;
+        employeeFlux.subscribe(e -> {
+            System.out.println(e.getName() + " " + Thread.currentThread().getName());
+        });
+        System.out.println("EmployeeController.getAllEmployeesStream2 bitti        :" + Thread.currentThread().getName());
+        return employeeFlux;
+    }
+
+    @GetMapping(value = "/stream3", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    private Flux<Employee> getAllEmployeesStream3() {
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.println("EmployeeController.getAllEmployeesStream3 :" + Thread.currentThread().getName());
+        Flux<Employee> employeeFlux =
+                Flux.fromStream(this::prepareEmployeeStream)  //.log()
                         .mergeWith(
                                 Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                                        .delayElements(Duration.ofMillis(2000))
                                         .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
                                 //.log()
                         );
         employeeFlux.subscribe(e -> {
             System.out.println(e.getName() + " " + Thread.currentThread().getName());
         });
-        System.out.println("EmployeeController.getAllEmployeesStream2 bitti        :" + Thread.currentThread().getName());
+        System.out.println("EmployeeController.getAllEmployeesStream3 bitti        :" + Thread.currentThread().getName());
+        return employeeFlux;
+    }
+
+    ///stream2 ile farkı, Content-Type: text/event-stream olmadığı için delay nedeniyle tüm yanıt gecikiyor. partial yanıt yok..
+    @GetMapping(value = "/json")
+    private Flux<Employee> getAllEmployeesJson() {
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.println("EmployeeController.getAllEmployeesJson :" + Thread.currentThread().getName());
+        Flux<Employee> employeeFlux =
+                Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                        .delayElements(Duration.ofMillis(2000))
+                        .publishOn(Schedulers.fromExecutor(publisherTaskExecutor));
+        employeeFlux.subscribe(e -> {
+            System.out.println(e.getName() + " " + Thread.currentThread().getName());
+        });
+        System.out.println("EmployeeController.getAllEmployeesJson bitti        :" + Thread.currentThread().getName());
         return employeeFlux;
     }
 
