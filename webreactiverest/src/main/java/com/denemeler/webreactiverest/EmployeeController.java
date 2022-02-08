@@ -109,6 +109,7 @@ public class EmployeeController {
         return employeeFlux;
     }
 
+   // curl -v http://localhost:9090/employees/stream2
     @GetMapping(value = "/stream2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     private Flux<Employee> getAllEmployeesStream2() {
         System.out.println("-----------------------------------------------------------------------------------------------------------");
@@ -142,6 +143,24 @@ public class EmployeeController {
             System.out.println(e.getName() + " " + Thread.currentThread().getName());
         });
         System.out.println("EmployeeController.getAllEmployeesStream3 bitti        :" + Thread.currentThread().getName());
+        return employeeFlux;
+    }
+
+    // curl -v http://localhost:9090/employees/ndjson
+    @GetMapping(value = "/ndjson", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    private Flux<Employee> getAllEmployeesNdJson() {
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.println("EmployeeController.getAllEmployeesNdJson :" + Thread.currentThread().getName());
+        Flux<Employee> employeeFlux =
+                Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                        .delayElements(Duration.ofMillis(2000))
+                        .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
+                //.log()
+                ;
+        employeeFlux.subscribe(e -> {
+            System.out.println(e.getName() + " " + Thread.currentThread().getName());
+        });
+        System.out.println("EmployeeController.getAllEmployeesNdJson bitti        :" + Thread.currentThread().getName());
         return employeeFlux;
     }
 
