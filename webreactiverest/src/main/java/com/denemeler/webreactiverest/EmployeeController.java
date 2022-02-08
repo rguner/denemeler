@@ -2,6 +2,7 @@ package com.denemeler.webreactiverest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,6 +83,22 @@ public class EmployeeController {
 
         //employeeFlux.subscribe(System.out::println);
         System.out.println("EmployeeController.getAllEmployees2 bitti            :" + Thread.currentThread().getName());
+        return employeeFlux;
+    }
+
+    @GetMapping(value = "/stream" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    private Flux<Employee> getAllEmployeesStream() {
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.println("EmployeeController.getAllEmployees :" + Thread.currentThread().getName());
+        Flux<Employee> employeeFlux = webClient.get()
+                .uri("/employees")
+                .retrieve()
+                .bodyToFlux(Employee.class)
+                .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
+                //.log()
+                ;
+        employeeFlux.subscribe(e-> {System.out.println(e.getName() + " " + Thread.currentThread().getName());});
+        System.out.println("EmployeeController.getAllEmployees bitti        :" + Thread.currentThread().getName());
         return employeeFlux;
     }
 
