@@ -20,6 +20,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/employees")
@@ -86,20 +87,63 @@ public class EmployeeController {
         return employeeFlux;
     }
 
-    @GetMapping(value = "/stream" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     private Flux<Employee> getAllEmployeesStream() {
         System.out.println("-----------------------------------------------------------------------------------------------------------");
-        System.out.println("EmployeeController.getAllEmployees :" + Thread.currentThread().getName());
-        Flux<Employee> employeeFlux = webClient.get()
-                .uri("/employees")
-                .retrieve()
-                .bodyToFlux(Employee.class)
-                .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
-                //.log()
-                ;
-        employeeFlux.subscribe(e-> {System.out.println(e.getName() + " " + Thread.currentThread().getName());});
-        System.out.println("EmployeeController.getAllEmployees bitti        :" + Thread.currentThread().getName());
+        System.out.println("EmployeeController.getAllEmployeesStream :" + Thread.currentThread().getName());
+        Flux<Employee> employeeFlux =
+                Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                        .mergeWith(
+                                webClient.get()
+                                        .uri("/employees")
+                                        .retrieve()
+                                        .bodyToFlux(Employee.class)
+                                        .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
+                                //.log()
+                        );
+        employeeFlux.subscribe(e -> {
+            System.out.println(e.getName() + " " + Thread.currentThread().getName());
+        });
+        System.out.println("EmployeeController.getAllEmployeesStream bitti        :" + Thread.currentThread().getName());
         return employeeFlux;
     }
+
+    @GetMapping(value = "/stream2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    private Flux<Employee> getAllEmployeesStream2() {
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.println("EmployeeController.getAllEmployeesStream2 :" + Thread.currentThread().getName());
+        Flux<Employee> employeeFlux =
+                Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                        .mergeWith(
+                                Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                                        .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
+                                //.log()
+                        );
+        employeeFlux.subscribe(e -> {
+            System.out.println(e.getName() + " " + Thread.currentThread().getName());
+        });
+        System.out.println("EmployeeController.getAllEmployeesStream2 bitti        :" + Thread.currentThread().getName());
+        return employeeFlux;
+    }
+
+
+    private Stream<Employee> prepareEmployeeStream() {
+        Employee employee1 = new Employee();
+        employee1.setId("StaticId1");
+        employee1.setName("Static Name1");
+        Employee employee2 = new Employee();
+        employee2.setId("StaticId2");
+        employee2.setName("Static Name2");
+        Employee employee3 = new Employee();
+        employee3.setId("StaticId3");
+        employee3.setName("Static Name3");
+
+        return Stream.of(
+                employee1,
+                employee2,
+                employee3
+        );
+    }
+
 
 }
