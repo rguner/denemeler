@@ -138,6 +138,11 @@ public class EmployeeController {
                                         .delayElements(Duration.ofMillis(2000))
                                         .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
                                 //.log()
+                        ).mergeWith(
+                                Flux.fromStream(this::prepareEmployeeStream)  //.log()
+                                        .delayElements(Duration.ofMillis(2000))
+                                        .publishOn(Schedulers.fromExecutor(publisherTaskExecutor))
+                                //.log()
                         );
         employeeFlux.subscribe(e -> {
             System.out.println(e.getName() + " " + Thread.currentThread().getName());
