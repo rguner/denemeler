@@ -1,5 +1,7 @@
 package com.denemeler.webrest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +21,10 @@ import java.util.stream.IntStream;
 @RequestMapping("/employees")
 public class EmployeeController {
 
+
+    private
+    @Autowired
+    HttpServletRequest httpServletRequest;
 
     @GetMapping("/{id}")
     private Employee getEmployeeById(@PathVariable String id) {
