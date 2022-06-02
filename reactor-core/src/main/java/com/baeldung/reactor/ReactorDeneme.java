@@ -18,7 +18,7 @@ public class ReactorDeneme {
 
     public static void main(String[] args) {
         ReactorDeneme reactorDeneme = new ReactorDeneme();
-        reactorDeneme.subscribeWithSeperateThread();
+        //reactorDeneme.subscribeWithSeperateThread();
         //reactorDeneme.fluxSubscribeWithLog();
         //reactorDeneme.fluxSubscribe();
         //reactorDeneme.fluxSubscribe2();
@@ -34,10 +34,21 @@ public class ReactorDeneme {
         // reactorDeneme.delayAndStream();
         // reactorDeneme.firstEmitting();
         // reactorDeneme.subsOnPubOn();
-        //reactorDeneme.errorOnReturn();
+        reactorDeneme.errorOnReturn();
         //reactorDeneme.errorOnResume();
         //reactorDeneme.doOnError();
         //reactorDeneme.onErrorMap();
+        //reactorDeneme.collectData();
+    }
+
+    private void collectData() {
+        List<Integer> elements = new ArrayList<>();
+
+        Flux.just(1, 2, 3, 4, 0, 5)
+                .log()
+                .subscribe(elements::add);
+
+        System.out.println(elements);
     }
 
     private void onErrorMap() {
@@ -72,7 +83,7 @@ public class ReactorDeneme {
     private void errorOnReturn() {
         List<Integer> elements = new ArrayList<>();
 
-        Flux.just(1, 2, 3, 4, 0, 5)
+        Flux.just(1, 2, 3, 4, 0, 5, 20, 25)
                 .log()
                 .map(i -> 100 / i)
                 .onErrorReturn(Integer.MAX_VALUE)
