@@ -26,15 +26,16 @@ public class ReactorDeneme {
         // reactorDeneme.fluxMap();
         // reactorDeneme.flatMap();
         //reactorDeneme.fluxZip();
+        reactorDeneme.fluxSample();
         // reactorDeneme.connectableFlux();f
-        // reactorDeneme.connectableFluxSample();
+        //reactorDeneme.connectableFluxSample();
         //reactorDeneme.fluxSubscribeParallel();
         // reactorDeneme.fluxSubscribe3();
         // reactorDeneme.withDelay();
         // reactorDeneme.delayAndStream();
         // reactorDeneme.firstEmitting();
         // reactorDeneme.subsOnPubOn();
-        reactorDeneme.errorOnReturn();
+        // reactorDeneme.errorOnReturn();
         //reactorDeneme.errorOnResume();
         //reactorDeneme.doOnError();
         //reactorDeneme.onErrorMap();
@@ -233,6 +234,17 @@ public class ReactorDeneme {
         }
 
         System.out.println("Sleep sonrasi " + elements);
+    }
+
+    private void fluxSample() {
+        Flux<Object> flux = Flux.create(fluxSink -> {
+                    while (true) {
+                        fluxSink.next(System.currentTimeMillis());
+                    }
+                })
+                .sample(ofSeconds(2));
+
+        flux.subscribe(System.out::println);
     }
 
     private void connectableFluxSample() {
