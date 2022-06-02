@@ -18,7 +18,7 @@ public class ReactorDeneme {
 
     public static void main(String[] args) {
         ReactorDeneme reactorDeneme = new ReactorDeneme();
-        //reactorDeneme.subscribeWithSeperateThread();
+        reactorDeneme.subscribeWithSeperateThread();
         //reactorDeneme.fluxSubscribeWithLog();
         //reactorDeneme.fluxSubscribe();
         //reactorDeneme.fluxSubscribe2();
@@ -26,15 +26,15 @@ public class ReactorDeneme {
         // reactorDeneme.fluxMap();
         // reactorDeneme.flatMap();
         //reactorDeneme.fluxZip();
-        reactorDeneme.fluxSample();
+        //reactorDeneme.fluxSample();
         // reactorDeneme.connectableFlux();f
         //reactorDeneme.connectableFluxSample();
         //reactorDeneme.fluxSubscribeParallel();
         // reactorDeneme.fluxSubscribe3();
-        // reactorDeneme.withDelay();
-        // reactorDeneme.delayAndStream();
+        //reactorDeneme.withDelay();
+        //reactorDeneme.delayAndStream();
         // reactorDeneme.firstEmitting();
-        // reactorDeneme.subsOnPubOn();
+        //reactorDeneme.subsOnPubOn();
         // reactorDeneme.errorOnReturn();
         //reactorDeneme.errorOnResume();
         //reactorDeneme.doOnError();
@@ -420,7 +420,7 @@ public class ReactorDeneme {
                     }
                 })
                 .log()
-                // .publishOn(Schedulers.newParallel("thread-publisher"), 2) ikişerli grup halinde alır.
+                // .publishOn(Schedulers.newParallel("thread-publisher"), 2) // ikişerli grup halinde alır.
                 .subscribeOn(Schedulers.newParallel("thread-subscribe"))
                 .subscribe(i -> {
                     System.out.println("Subscribe Thread --> " + Thread.currentThread().getName() + ", value --> " + i);
